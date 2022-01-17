@@ -1,0 +1,17 @@
+#!/bin/bash
+cd ${0%/*} || exit 1    # run from this directory
+
+set -e # Any subsequent(*) commands which fail will cause the shell script to exit immediately
+
+MYLIBNAME=libmoreDiffusion.so
+
+if [ ! -f ${FOAM_USER_LIBBIN}/${MYLIBNAME} ] ; then
+    echo "Compiled library $MYLIBNAME is not found"
+    exit
+fi
+
+cd Function2
+    wmake
+    Test-Function2 -libs "(\"${MYLIBNAME}\")" binaryDiffusionCoefficientsPolynomial
+    python binaryDiffusionCoefficients.py
+cd ..

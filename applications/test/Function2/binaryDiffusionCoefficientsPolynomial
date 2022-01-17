@@ -1,0 +1,14 @@
+function binaryDiffusionCoefficientsPolynomial;
+
+// For N2-H2 from Cantera get_binary_diff_coeffs_polynomial(...)
+polynomialCoeffs (-7.32328055e-03  4.24748624e-03 -8.03359454e-04  7.09683777e-05 -2.28426907e-06);
+
+// Pressure range
+x0 85000;
+x1 110000;
+nX 10;
+
+// Temperature range
+y0 300;
+y1 2500;
+nY 11;

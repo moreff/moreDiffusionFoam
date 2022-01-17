@@ -1,0 +1,32 @@
+#!/bin/bash
+cd ${0%/*} || exit 1    # run from this directory
+
+
+blockMesh
+
+models="
+unityLewisFourier
+FickianFourier
+MaxwellStefanFourier
+"
+
+for model in $models
+do
+    echo -e "[$0] Running case for model: $model"
+
+    foamListTimes -rm
+    foamDictionary -entry laminar/model -set "$model" \
+        constant/thermophysicalTransport > /dev/null
+
+    reactingFoam > log.reactingFoam-${model}
+    postProcess -func graphUniform -latestTime
+    mv postProcessing postProcessing-${model}
+    mv 2000 2000-${model}
+done
+
+foamDictionary -entry laminar/model -set unityLewisFourier \
+    constant/thermophysicalTransport > /dev/null
+reactingLeFoam > log.reactingFoam-reactingLeFoam
+postProcess -func graphUniform -latestTime
+mv postProcessing postProcessing-reactingLeFoam
+mv 2000 2000-reactingLeFoam
